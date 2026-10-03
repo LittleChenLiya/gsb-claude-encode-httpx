@@ -7,6 +7,7 @@ from ._content import *
 from ._exceptions import *
 from ._models import *
 from ._status_codes import *
+from ._strict_length import *
 from ._transports import *
 from ._types import *
 from ._urls import *
@@ -35,6 +36,8 @@ __all__ = [
     "AsyncByteStream",
     "AsyncClient",
     "AsyncHTTPTransport",
+    "AsyncStrictLengthStream",
+    "AsyncStrictLengthTransport",
     "Auth",
     "BaseTransport",
     "BasicAuth",
@@ -44,6 +47,7 @@ __all__ = [
     "codes",
     "ConnectError",
     "ConnectTimeout",
+    "ContentLengthError",
     "CookieConflict",
     "Cookies",
     "create_ssl_context",
@@ -65,6 +69,7 @@ __all__ = [
     "NetRCAuth",
     "NetworkError",
     "options",
+    "parse_content_length",
     "patch",
     "PoolTimeout",
     "post",
@@ -82,10 +87,13 @@ __all__ = [
     "RequestNotRead",
     "Response",
     "ResponseNotRead",
+    "response_expects_body",
     "stream",
     "StreamClosed",
     "StreamConsumed",
     "StreamError",
+    "StrictLengthStream",
+    "StrictLengthTransport",
     "SyncByteStream",
     "Timeout",
     "TimeoutException",

@@ -25,6 +25,7 @@ For an overview of how to work with HTTPX exceptions, see [Exceptions (Quickstar
             * ProxyError
             * UnsupportedProtocol
         * DecodingError
+        * ContentLengthError
         * TooManyRedirects
     * HTTPStatusError
 * InvalidURL
@@ -94,6 +95,9 @@ For an overview of how to work with HTTPX exceptions, see [Exceptions (Quickstar
     :docstring:
 
 ::: httpx.DecodingError
+    :docstring:
+
+::: httpx.ContentLengthError
     :docstring:
 
 ::: httpx.TooManyRedirects

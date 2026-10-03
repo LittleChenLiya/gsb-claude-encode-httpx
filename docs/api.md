@@ -174,3 +174,62 @@ what gets sent over the wire.*
 * `.auth` - **tuple[str, str]**
 * `.headers` - **Headers**
 * `.ssl_context` - **SSLContext**
+
+## Strict Content-Length Validation
+
+The `StrictLengthTransport` / `AsyncStrictLengthTransport` wrappers provide
+*optional* validation of the raw (pre-decoding) response body against the
+declared `Content-Length`. They do not change the default behaviour of
+`Client` / `AsyncClient` / `Response`.
+
+```pycon
+>>> transport = httpx.StrictLengthTransport(httpx.HTTPTransport())
+>>> client = httpx.Client(transport=transport)
+```
+
+* `def __init__(transport)` - Wrap an existing transport.
+
+The stream wrappers can also be used directly to validate an individual
+response stream...
+
+```pycon
+>>> stream = httpx.StrictLengthStream(inner_stream, content_length=5)
+```
+
+* `def __init__(stream, *, content_length, [expects_body])`
+* `.num_bytes_downloaded` - **int** - The number of raw bytes delivered so far.
+
+`ContentLengthError` is raised when...
+
+* The stream ends before the declared length (`reason="short_read"`).
+* The stream delivers more bytes than declared (`reason="over_read"`) - this
+  fails immediately, mid-stream.
+* Multiple, differing `Content-Length` headers are received
+  (`reason="conflicting_headers"`).
+* A `Content-Length` value is not a valid non-negative integer
+  (`reason="malformed_headers"`).
+
+The `declared_length` and `received_length` attributes record the declared
+length (if any) and the number of raw bytes received when the failure was
+detected.
+
+Responses to `HEAD` requests, and `1xx` / `204` / `304` responses, never
+carry a message body per HTTP semantics and are passed through untouched.
+
+::: httpx.StrictLengthTransport
+    :docstring:
+
+::: httpx.AsyncStrictLengthTransport
+    :docstring:
+
+::: httpx.StrictLengthStream
+    :docstring:
+
+::: httpx.AsyncStrictLengthStream
+    :docstring:
+
+::: httpx.parse_content_length
+    :docstring:
+
+::: httpx.response_expects_body
+    :docstring:

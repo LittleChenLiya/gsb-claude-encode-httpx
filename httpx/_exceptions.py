@@ -20,6 +20,7 @@ Our exception hierarchy:
       - ProxyError
       - UnsupportedProtocol
     + DecodingError
+    + ContentLengthError
     + TooManyRedirects
   x HTTPStatusError
 * InvalidURL
@@ -43,6 +44,7 @@ __all__ = [
     "CloseError",
     "ConnectError",
     "ConnectTimeout",
+    "ContentLengthError",
     "CookieConflict",
     "DecodingError",
     "HTTPError",
@@ -244,6 +246,44 @@ class DecodingError(RequestError):
     """
     Decoding of the response failed, due to a malformed encoding.
     """
+
+
+class ContentLengthError(RequestError):
+    """
+    The response body did not match the declared `Content-Length`.
+
+    Raised by the optional `StrictLengthStream` / `StrictLengthTransport`
+    wrappers, which validate the *raw* (pre-decoding) response body against
+    the declared length.
+
+    The `reason` attribute is one of...
+
+    * `"conflicting_headers"` - Multiple, differing `Content-Length` headers
+      were received.
+    * `"malformed_headers"` - A `Content-Length` value was not a valid
+      non-negative integer.
+    * `"short_read"` - The stream ended before the declared number of bytes
+      were received.
+    * `"over_read"` - The stream delivered more bytes than declared.
+
+    The `declared_length` and `received_length` attributes record the
+    declared length (if any) and the number of raw bytes received when the
+    failure was detected.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        declared_length: int | None = None,
+        received_length: int = 0,
+        reason: str | None = None,
+        request: Request | None = None,
+    ) -> None:
+        super().__init__(message, request=request)
+        self.declared_length = declared_length
+        self.received_length = received_length
+        self.reason = reason
 
 
 class TooManyRedirects(RequestError):
