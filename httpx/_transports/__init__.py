@@ -2,6 +2,7 @@ from .asgi import *
 from .base import *
 from .default import *
 from .mock import *
+from .scenario import *
 from .wsgi import *
 
 __all__ = [
@@ -11,5 +12,10 @@ __all__ = [
     "AsyncHTTPTransport",
     "HTTPTransport",
     "MockTransport",
+    "ScenarioTransport",
+    "ScenarioStep",
+    "ScenarioMismatch",
+    "Barrier",
+    "Chunk",
     "WSGITransport",
 ]
