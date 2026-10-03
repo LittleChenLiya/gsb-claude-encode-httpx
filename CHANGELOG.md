@@ -13,6 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 * Expose `FunctionAuth` from the public API. (#3699)
+* Add the optional `httpx.enforce_content_length` response event hook,
+  which strictly validates the response `Content-Length` header against
+  the raw (pre-decoding) response body. It raises
+  `httpx.InvalidContentLength` for malformed or conflicting duplicate
+  headers, and `httpx.ContentLengthTooShort`/`httpx.ContentLengthTooLong`
+  (subclasses of `httpx.RemoteProtocolError`) when the streamed body is
+  shorter or longer than declared. Default `Response`/client behaviour
+  is unchanged.
 
 ## 0.28.1 (6th December, 2024)
 

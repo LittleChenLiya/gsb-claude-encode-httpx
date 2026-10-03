@@ -17,6 +17,10 @@ Our exception hierarchy:
       - ProtocolError
         · LocalProtocolError
         · RemoteProtocolError
+          › InvalidContentLength
+          › ContentLengthError
+            · ContentLengthTooShort
+            · ContentLengthTooLong
       - ProxyError
       - UnsupportedProtocol
     + DecodingError
@@ -43,10 +47,14 @@ __all__ = [
     "CloseError",
     "ConnectError",
     "ConnectTimeout",
+    "ContentLengthError",
+    "ContentLengthTooLong",
+    "ContentLengthTooShort",
     "CookieConflict",
     "DecodingError",
     "HTTPError",
     "HTTPStatusError",
+    "InvalidContentLength",
     "InvalidURL",
     "LocalProtocolError",
     "NetworkError",
@@ -234,6 +242,57 @@ class RemoteProtocolError(ProtocolError):
     The protocol was violated by the server.
 
     For example, returning malformed HTTP.
+    """
+
+
+class InvalidContentLength(RemoteProtocolError):
+    """
+    The response included a malformed `Content-Length` header, or
+    multiple `Content-Length` headers with disagreeing values.
+
+    Per RFC 9110 a recipient must reject such responses rather than
+    guessing which value is correct.
+    """
+
+    def __init__(
+        self, message: str, *, values: list[str] | None = None, **kwargs: typing.Any
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.values = values
+
+
+class ContentLengthError(RemoteProtocolError):
+    """
+    The base class for `ContentLengthTooShort` and `ContentLengthTooLong`.
+
+    The number of raw body bytes received did not match the value declared
+    by the response `Content-Length` header.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        expected: int,
+        received: int,
+        **kwargs: typing.Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.expected = expected
+        self.received = received
+
+
+class ContentLengthTooShort(ContentLengthError):
+    """
+    The response body ended before the number of bytes declared by
+    `Content-Length` had been received (a "short read").
+    """
+
+
+class ContentLengthTooLong(ContentLengthError):
+    """
+    More raw body bytes were received than the number declared by
+    `Content-Length`.
     """
 
 

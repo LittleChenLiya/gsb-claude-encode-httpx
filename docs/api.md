@@ -174,3 +174,22 @@ what gets sent over the wire.*
 * `.auth` - **tuple[str, str]**
 * `.headers` - **Headers**
 * `.ssl_context` - **SSLContext**
+
+## Strict Content-Length
+
+An optional response event hook that enforces the response
+`Content-Length` header. It is opt-in and does not change the default
+behaviour of `Client`, `AsyncClient` or `Response`. See the
+[Event Hooks documentation](advanced/event-hooks.md#strict-content-length-enforcement)
+for usage and semantics.
+
+::: httpx.enforce_content_length
+    :docstring:
+
+::: httpx.ContentLengthError
+
+::: httpx.ContentLengthTooShort
+
+::: httpx.ContentLengthTooLong
+
+::: httpx.InvalidContentLength

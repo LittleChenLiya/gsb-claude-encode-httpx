@@ -22,6 +22,10 @@ For an overview of how to work with HTTPX exceptions, see [Exceptions (Quickstar
             * ProtocolError
                 * LocalProtocolError
                 * RemoteProtocolError
+                    * InvalidContentLength
+                    * ContentLengthError
+                        * ContentLengthTooShort
+                        * ContentLengthTooLong
             * ProxyError
             * UnsupportedProtocol
         * DecodingError
@@ -85,6 +89,18 @@ For an overview of how to work with HTTPX exceptions, see [Exceptions (Quickstar
     :docstring:
 
 ::: httpx.RemoteProtocolError
+    :docstring:
+
+::: httpx.InvalidContentLength
+    :docstring:
+
+::: httpx.ContentLengthError
+    :docstring:
+
+::: httpx.ContentLengthTooShort
+    :docstring:
+
+::: httpx.ContentLengthTooLong
     :docstring:
 
 ::: httpx.ProxyError
